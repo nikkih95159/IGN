@@ -68,10 +68,10 @@ body {
 }
 
 /* Add a color to the active/current link */
-.topnav a.active {
+/* .topnav a.active { */
     /* background-color: #4CAF50; */
     /* color: white; */
-}
+/* } */
 
 .video-container {
   width: 800px;
@@ -202,14 +202,14 @@ video {
   /* opacity: 0.2; */
 }
 
-.next {
+/* .next { */
   /* right: 0; */
   /* left: 180; */
   /* padding: 15px; */
   /* position: absolute; */
   /* bottom: 280px; */
   /* transition: all 0.2s ease; */
-}
+/* } */
 
 .video-controls.hide {
   opacity: 0;

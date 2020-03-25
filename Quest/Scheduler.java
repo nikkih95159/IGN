@@ -1,3 +1,5 @@
+package Quest;
+
 import java.util.*;
 /**
 I implemented this solution using the greedy scheduling algorithm. The algorithm

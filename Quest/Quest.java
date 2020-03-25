@@ -1,3 +1,5 @@
+package Quest;
+
 class Quest {
     String quest;
     int startDate;

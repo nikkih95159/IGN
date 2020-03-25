@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    // get videos & its metadata
     $.ajax({
         url: "https://ign-apis.herokuapp.com/videos?startIndex=0&count=20",
         headers: {
@@ -19,7 +20,47 @@ $(document).ready(function() {
                 if (mm < 10)
                     mm = '0' + mm;
                 var d = mm+'/'+dd+'/'+yyyy;
+                var assetSize = data.data[i].assets.length;
+                var thumbnailSize = data.data[i].thumbnails.length;
                 playlist[i] = {
+                    contentId: data.data[i].contentId,
+                    title: data.data[i].metadata.title,
+                    thumbnail: data.data[i].thumbnails[thumbnailSize-1].url,
+                    url: data.data[i].assets[1].url,
+                    HDurl: data.data[i].assets[assetSize - 1].url,
+                    description: data.data[i].metadata.description,
+                    date: d,
+                    comments: 0
+                };
+                addComments(i);
+            }
+            loadVideos();
+        },
+        error: function(request, error) {
+            alert("Request: " + JSON.stringify(request));
+        }
+    })
+    $.ajax({
+        url: "https://ign-apis.herokuapp.com/videos?startIndex=20&count=20",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        type: "GET", /* or type:"GET" or type:"PUT" */
+        dataType: "json",
+        data: {
+        },
+        success: function(data) {
+            for (i = 0; i < data.data.length; i++) {
+                var date = new Date(data.data[i].metadata.publishDate);
+                var dd = date.getDate(); 
+                var mm = date.getMonth()+1;
+                var yyyy = date.getFullYear(); 
+                if (dd < 10)
+                    dd = '0'+ dd; 
+                if (mm < 10)
+                    mm = '0' + mm;
+                var d = mm+'/'+dd+'/'+yyyy;
+                playlist[i+20] = {
                     contentId: data.data[i].contentId,
                     title: data.data[i].metadata.title,
                     thumbnail: data.data[i].thumbnails[2].url,
@@ -28,9 +69,46 @@ $(document).ready(function() {
                     date: d,
                     comments: 0
                 };
-                addComments(i);
+                addComments(i+20);
             }
-            loadVideos();
+            // loadVideos();
+        },
+        error: function(request, error) {
+            alert("Request: " + JSON.stringify(request));
+        }
+    });
+    $.ajax({
+        url: "https://ign-apis.herokuapp.com/videos?startIndex=40&count=20",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        type: "GET", /* or type:"GET" or type:"PUT" */
+        dataType: "json",
+        data: {
+        },
+        success: function(data) {
+            for (i = 0; i < data.data.length; i++) {
+                var date = new Date(data.data[i].metadata.publishDate);
+                var dd = date.getDate(); 
+                var mm = date.getMonth()+1;
+                var yyyy = date.getFullYear(); 
+                if (dd < 10)
+                    dd = '0'+ dd; 
+                if (mm < 10)
+                    mm = '0' + mm;
+                var d = mm+'/'+dd+'/'+yyyy;
+                playlist[i+40] = {
+                    contentId: data.data[i].contentId,
+                    title: data.data[i].metadata.title,
+                    thumbnail: data.data[i].thumbnails[2].url,
+                    url: data.data[i].assets[3].url,
+                    description: data.data[i].metadata.description,
+                    date: d,
+                    comments: 0
+                };
+                addComments(i+40);
+            }
+            // loadVideos();
         },
         error: function(request, error) {
             alert("Request: " + JSON.stringify(request));
@@ -78,7 +156,7 @@ const videoTitle = document.getElementById('video-title');
 const videoDescription = document.getElementById('video-description');
 const videoComments = document.getElementById('video-comments');
 const videoDate = document.getElementById('video-date');
-const video = document.getElementById('video');
+const video = document.getElementById('video0');
 const videoControls = document.getElementById('video-controls');
 const topControls = document.getElementById('top-controls');
 
@@ -401,6 +479,12 @@ function keyboardShortcuts(event) {
         case 'p':
             togglePip();
             break;
+        case 'r':
+            toggleLoop();
+            break;
+        case 'n':
+            playNext();
+            break;
     }
 }
 
@@ -415,7 +499,10 @@ function playNextVideo() {
     else {
         if (playlistIndex < playlist.length) {
             setTimeout(() => {
-                video.setAttribute('src', playlist[playlistIndex].url);
+                if (HDButton.getAttribute('data-title') === 'HD')
+                    video.setAttribute('src', playlist[playlistIndex].url);
+                else
+                    video.setAttribute('src', playlist[playlistIndex].HDurl);
                 video.setAttribute('poster', playlist[playlistIndex].thumbnail);
                 title.innerHTML = playlist[playlistIndex].title;
                 videoTitle.innerHTML = playlist[playlistIndex].title;
@@ -423,6 +510,7 @@ function playNextVideo() {
                 videoDate.innerHTML = 'Published on: ' + playlist[playlistIndex].date;
                 videoComments.innerHTML = 'Number of commments: ' + playlist[playlistIndex].comments;
                 video.play();
+                index = playlistIndex;
                 playlistIndex++;
             }, 2000);
         }
@@ -436,19 +524,25 @@ const nextButton = document.getElementById('next-button');
 nextButton.addEventListener('click', playNext);
 function playNext() {
     if (playlistIndex < playlist.length) {
-        setTimeout(() => {
-            video.setAttribute('src', playlist[playlistIndex].url);
-            video.setAttribute('poster', playlist[playlistIndex].thumbnail);
-            title.innerHTML = playlist[playlistIndex].title;
-            videoTitle.innerHTML = playlist[playlistIndex].title;
-            videoDescription.innerHTML = playlist[playlistIndex].description;
-            videoDate.innerHTML = 'Published on: ' + playlist[playlistIndex].date;
-            videoComments.innerHTML = 'Number of commments: ' + playlist[playlistIndex].comments;
-            pauseIcon.setAttribute('class', 'hidden');
-            playIcon.setAttribute('class', '');
-            video.play();
-            playlistIndex++;
-        }, 500);
+        if (video.getAttribute('src') !== playlist[playlistIndex].url || video.getAttribute('src') !== playlist[playlistIndex].HDurl) {
+            setTimeout(() => {
+                if (HDButton.getAttribute('data-title') === 'HD')
+                    video.setAttribute('src', playlist[playlistIndex].url);
+                else
+                    video.setAttribute('src', playlist[playlistIndex].HDurl);
+                video.setAttribute('poster', playlist[playlistIndex].thumbnail);
+                title.innerHTML = playlist[playlistIndex].title;
+                videoTitle.innerHTML = playlist[playlistIndex].title;
+                videoDescription.innerHTML = playlist[playlistIndex].description;
+                videoDate.innerHTML = 'Published on: ' + playlist[playlistIndex].date;
+                videoComments.innerHTML = 'Number of commments: ' + playlist[playlistIndex].comments;
+                pauseIcon.setAttribute('class', 'hidden');
+                playIcon.setAttribute('class', '');
+                video.play();
+                index = playlistIndex;
+                playlistIndex++;
+            }, 500);
+        }
     }
 }
 
@@ -470,9 +564,13 @@ video4.addEventListener('click', function() {
 });
 const playIcon = document.getElementById('play-button');
 const pauseIcon = document.getElementById('pause-button');
+var index = 0;
 function playClickedVideo(num) {
-    if (video.getAttribute('src') !== playlist[num].url) {
-        video.setAttribute('src', playlist[num].url);
+    if (video.getAttribute('src') !== playlist[num].url || video.getAttribute('src') !== playlist[1].HDurl) {
+        if (HDButton.getAttribute('data-title') === 'HD')
+            video.setAttribute('src', playlist[num].url);
+        else
+            video.setAttribute('src', playlist[num].HDurl);
         video.setAttribute('poster', playlist[num].thumbnail);
         title.innerHTML = playlist[num].title;
         videoTitle.innerHTML = playlist[num].title;
@@ -481,6 +579,8 @@ function playClickedVideo(num) {
         videoComments.innerHTML = 'Number of commments: ' + playlist[num].comments;
         pauseIcon.setAttribute('class', 'hidden');
         playIcon.setAttribute('class', '');
+        index = num;
+        playlistIndex = num + 1;
         setTimeout(() => {
             video.play();
         }, 1000);
@@ -496,7 +596,7 @@ function loadMoreVideos() {
     videosDisplayed++;
     for (i = videosDisplayed; i < videosDisplayed+4; i++) {
         console.log(i);
-        if (i < 20) {
+        if (i < 60) {
             moreVideos.innerHTML +=
                 "<hr>" +
                 "<div class='row'>" +
@@ -523,9 +623,9 @@ function loadMoreVideos() {
 }
 
 const repeatButton = document.getElementById('repeat-button');
-repeatButton.addEventListener('click', loopVideo);
+repeatButton.addEventListener('click', toggleLoop);
 const repeatIcons = document.querySelectorAll('.repeat-button object');
-function loopVideo() {
+function toggleLoop() {
     repeatIcons.forEach(icon => icon.classList.toggle('hidden'));
     if (video.loop === true) {
         video.loop = false;
@@ -537,3 +637,28 @@ function loopVideo() {
     }
 }
 
+const HDButton = document.getElementById('HD-button');
+HDButton.addEventListener('click', toggleHD);
+const HDIcons = document.querySelectorAll('.HD-button object');
+function toggleHD() {
+    HDIcons.forEach(icon => icon.classList.toggle('hidden'));
+    if (HDButton.getAttribute('data-title') === 'HD') {
+        var currTime = video.currentTime;
+        // var str = video.getAttribute('id').substring(5, video.getAttribute('id').length);
+        // str = parseInt(str);
+        HDButton.setAttribute('data-title', 'Regular');
+        video.setAttribute('src', playlist[index].HDurl);
+        video.currentTime = currTime;
+        video.play();
+    }
+    else {
+        var currTime = video.currentTime;
+        // var str = video.getAttribute('id').substring(5, video.getAttribute('id').length);
+        // str = parseInt(str);
+        HDButton.setAttribute('data-title', 'HD');
+        video.setAttribute('src', playlist[index].url);
+        video.currentTime = currTime;
+        video.play();
+    }
+    // repeatButton.setAttribute('data-title', 'No Repeat (r)');
+}
