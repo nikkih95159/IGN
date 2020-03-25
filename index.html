@@ -25,20 +25,6 @@
   </header>
 
     <div class="video-container" id="video-container">
-      <div class="top-controls hidden" id="top-controls">
-        <div class="left-controls">
-          <div class="title" id="title">
-            <h5></h5>
-          </div>
-        </div>
-        <div class="right-controls">
-          <div class="next">
-            <button data-title="Next (n)" id="forward" class="forward-icon">
-              <object data="forward.png"></object>
-            </button>
-          </div>
-        </div>
-      </div>
 
       <div class="playback-animation" id="playback-animation">
         <!-- <svg class="playback-icons"> -->
@@ -49,15 +35,33 @@
           <object data="play.png" class="hidden"></object>
           <object data="pause.png"></object>
         </div>
+        <!-- <div class="arrow-animation" id="arrow-animation">
+          <object data="goBack.png" id="goback" class="hidden"></object>
+          <object data="skip.png" id="skip" class="hidden"></object>
+        </div> -->
       </div>
 
       <!-- <video controls class="video" id="video" preload="metadata" poster="poster.jpg"> -->
       <video controls class="video" id="video" preload="metadata">
-        <source src="sintel-short.mp4" type="video/mp4"></source>
+        <source src="" type="video/mp4"></source>
         <track label="English" kind="subtitles" srclang="en" src="" default>
       </video>
 
       <div class="video-controls hidden" id="video-controls">
+        <div class="top-controls hidden" id="top-controls">
+          <div class="left-controls">
+            <div class="title" id="title">
+              <h5></h5>
+            </div>
+          </div>
+          <div class="right-controls">
+            <div class="next">
+              <button data-title="Next (n)" id="next-button" class="next-button">
+                <object data="forward.png"></object>
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="video-progress">
           <progress id="progress-bar" value="0" min="0"></progress>
           <input class="seek" id="seek" value="0" min="0" type="range" step="1">
@@ -75,8 +79,9 @@
               <!-- </svg> -->
             </button>
 
-            <button data-title="Repeat (r)" id="repeat" class="repeat-button">
+            <button data-title="Repeat (r)" id="repeat-button" class="repeat-button">
               <object data="repeat.png"></object>
+              <object data="onRepeat.png" class="hidden"></object>
             </button>
 
             <div class="volume-controls">
@@ -179,6 +184,8 @@
       <div class="video-title" id="video-title">
       </div>
       <div class="video-description" id="video-description">
+      </div>
+      <div class="video-description" id="video-date">
       </div>
       <div class="video-description" id="video-comments">
       </div>
