@@ -4,21 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Custom HTML5 Video Player</title>
+  <title>Video Player</title>
   <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
   <div class="container">
+    <header>
+      <!-- <navbar> -->
+        <div class="navbar">
+          <div class="topnav">
+              <a href="#" id="nav0"></a>
+              <!-- <a class="active" href="#home">Home</a> -->
+              <a href="#" id="nav1"></a>
+              <a href="#" id="nav2"></a>
+              <a href="#" id="nav3"></a>
+              <a href="#" id="nav4"></a>
+          </div>
+      <!-- </navbar> -->
+        </div>
+  </header>
+
     <div class="video-container" id="video-container">
-      <div class="playback-animation" id="playback-animation">
-        <svg class="playback-icons">
-          <use class="hidden" href="#play-icon"></use>
-          <use href="#pause"></use>
-        </svg>
+      <div class="top-controls hidden" id="top-controls">
+        <div class="left-controls">
+          <div class="title" id="title">
+            <h5></h5>
+          </div>
+        </div>
+        <div class="right-controls">
+          <div class="next">
+            <button data-title="Next (n)" id="forward" class="forward-icon">
+              <object data="forward.png"></object>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <video controls class="video" id="video" preload="metadata" poster="poster.jpg">
-        <source src="video.mp4" type="video/mp4"></source>
+      <div class="playback-animation" id="playback-animation">
+        <!-- <svg class="playback-icons"> -->
+          <!-- <use class="hidden" href="#play-icon"></use> -->
+          <!-- <use href="#pause"></use> -->
+        <!-- </svg> -->
+        <div class="playback-icons">
+          <object data="play.png" class="hidden"></object>
+          <object data="pause.png"></object>
+        </div>
+      </div>
+
+      <!-- <video controls class="video" id="video" preload="metadata" poster="poster.jpg"> -->
+      <video controls class="video" id="video" preload="metadata">
+        <source src="sintel-short.mp4" type="video/mp4"></source>
+        <track label="English" kind="subtitles" srclang="en" src="" default>
       </video>
 
       <div class="video-controls hidden" id="video-controls">
@@ -30,20 +66,29 @@
 
         <div class="bottom-controls">
           <div class="left-controls">
-            <button data-title="Play (k)" id="play">
-              <svg class="playback-icons">
-                <use href="#play-icon"></use>
-                <use class="hidden" href="#pause"></use>
-              </svg>
+            <button data-title="Play (k)" id="play" class="playback-icons">
+              <!-- <svg class="playback-icons"> -->
+                <!-- <use href="#play-icon"></use> -->
+                <!-- <use class="hidden" href="#pause"></use> -->
+                <object data="play.png" id="play-button"></object>
+                <object data="pause.png" id="pause-button" class="hidden"></object>
+              <!-- </svg> -->
+            </button>
+
+            <button data-title="Repeat (r)" id="repeat" class="repeat-button">
+              <object data="repeat.png"></object>
             </button>
 
             <div class="volume-controls">
               <button data-title="Mute (m)" class="volume-button" id="volume-button">
-                <svg>
+                <!-- <svg>
                   <use class="hidden" href="#volume-mute"></use>
                   <use class="hidden" href="#volume-low"></use>
                   <use href="#volume-high"></use>
-                </svg>
+                </svg> -->
+                <object data="mute.png" class="hidden" id="mute"></object>
+                <object data="low-volume.png" class="hidden" id="volume-low"></object>
+                <object data="full-volume.png" id="volume-high"></object>
               </button>
 
               <input class="volume" id="volume" value="1"
@@ -58,34 +103,99 @@
           </div>
 
           <div class="right-controls">
+            <button data-title="HD" class="HD-button" id="HD-button">
+              <object data="4k.png"></object>
+            </button>
+            <button data-title="CC" class="CC-button" id="CC-button">
+              <!-- <svg> -->
+                <!-- <use href="#CC"></use> -->
+              <!-- </svg> -->
+              <object data="cc2.png"></object>
+            </button>
             <button data-title="PIP (p)" class="pip-button" id="pip-button">
-              <svg>
-                <use href="#pip"></use>
-              </svg>
+              <!-- <svg> -->
+                <!-- <use href="#pip"></use> -->
+              <!-- </svg> -->
+              <object data="pip.png"></object>
             </button>
             <button data-title="Full screen (f)" class="fullscreen-button" id="fullscreen-button">
-              <svg>
+              <!-- <svg>
                 <use href="#fullscreen"></use>
                 <use href="#fullscreen-exit" class="hidden"></use>
-              </svg>
+              </svg> -->
+              <object data="fullscreen.png"></object>
+              <object data="fullscreen-exit.png" class="hidden"></object>
             </button>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="playlist-container" id="playlist-container">
+      <div class="row">
+        <div class="left">
+          <a href="#">
+            <img id="video1" src="" style="width: 125px; height:75px;">
+          </a>
+        </div>
+        <div class="right" id="video1-title">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="left">
+          <a href="#">
+            <img id="video2" src="" style="width: 125px; height:75px;">
+          </a>
+        </div>
+        <div class="right" id="video2-title">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="left">
+          <a href="#">
+            <img id="video3" src="" style="width: 125px; height:75px;">
+          </a>
+        </div>
+        <div class="right" id="video3-title">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="left">
+          <a href="#">
+            <img id="video4" src="" style="width: 125px; height:75px;">
+          </a>
+        </div>
+        <div class="right" id="video4-title">
+        </div>
+      </div>
+      <div id="more-videos">
+      </div>
+        <br>
+        <button type="button" onclick="loadMoreVideos()" class="button-load" id="load-button">Load more</button>
+    </div>
+    <div class="description-container">
+      <div class="video-title" id="video-title">
+      </div>
+      <div class="video-description" id="video-description">
+      </div>
+      <div class="video-description" id="video-comments">
       </div>
     </div>
   </div>
 
   <svg style="display: none">
     <defs>
-      <symbol id="pause" viewBox="0 0 24 24">
+      <!-- <symbol id="pause" viewBox="0 0 24 24">
         <path d="M14.016 5.016h3.984v13.969h-3.984v-13.969zM6 18.984v-13.969h3.984v13.969h-3.984z"></path>
       </symbol>
 
       <symbol id="play-icon" viewBox="0 0 24 24">
         <path d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"></path>
-      </symbol>
+      </symbol> -->
 
-      <symbol id="volume-high" viewBox="0 0 24 24">
+      <!-- <symbol id="volume-high" viewBox="0 0 24 24">
       <path d="M14.016 3.234q3.047 0.656 5.016 3.117t1.969 5.648-1.969 5.648-5.016 3.117v-2.063q2.203-0.656 3.586-2.484t1.383-4.219-1.383-4.219-3.586-2.484v-2.063zM16.5 12q0 2.813-2.484 4.031v-8.063q1.031 0.516 1.758 1.688t0.727 2.344zM3 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6z"></path>
       </symbol>
 
@@ -95,22 +205,24 @@
 
       <symbol id="volume-mute" viewBox="0 0 24 24">
       <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
-      </symbol>
+      </symbol> -->
 
-      <symbol id="fullscreen" viewBox="0 0 24 24">
+      <!-- <symbol id="fullscreen" viewBox="0 0 24 24">
       <path d="M14.016 5.016h4.969v4.969h-1.969v-3h-3v-1.969zM17.016 17.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 9.984v-4.969h4.969v1.969h-3v3h-1.969zM6.984 14.016v3h3v1.969h-4.969v-4.969h1.969z"></path>
       </symbol>
 
       <symbol id="fullscreen-exit" viewBox="0 0 24 24">
       <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
-      </symbol>
+      </symbol> -->
 
-      <symbol id="pip" viewBox="0 0 24 24">
-      <path d="M21 19.031v-14.063h-18v14.063h18zM23.016 18.984q0 0.797-0.609 1.406t-1.406 0.609h-18q-0.797 0-1.406-0.609t-0.609-1.406v-14.016q0-0.797 0.609-1.383t1.406-0.586h18q0.797 0 1.406 0.586t0.609 1.383v14.016zM18.984 11.016v6h-7.969v-6h7.969z"></path>
-      </symbol>
+      <!-- <symbol id="pip" viewBox="0 0 24 24"> -->
+      <!-- <path d="M21 19.031v-14.063h-18v14.063h18zM23.016 18.984q0 0.797-0.609 1.406t-1.406 0.609h-18q-0.797 0-1.406-0.609t-0.609-1.406v-14.016q0-0.797 0.609-1.383t1.406-0.586h18q0.797 0 1.406 0.586t0.609 1.383v14.016zM18.984 11.016v6h-7.969v-6h7.969z"></path> -->
+      <!-- </symbol> -->
     </defs>
   </svg>
 
+  <!-- <script src="https://code.jquery.com/jquery.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="index.js"></script>
 
 </body>
