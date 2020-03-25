@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "custom-html5-video",
   "version": "1.0.0",
@@ -16,3 +17,23 @@
     "browser-sync": "^2.26.7"
   }
 }
+=======
+{
+  "name": "custom-html5-video",
+  "version": "1.0.0",
+  "description": "Custom HTML5 Video tutorial",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx browser-sync start -sw"
+  },
+  "keywords": [
+    "javascript",
+    "html5"
+  ],
+  "author": "Ayooluwa Isaiah <ayo@freshman.tech> (https://freshman.tech)",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.26.7"
+  }
+}
+>>>>>>> bd5925291bd2ca5206b7fd47a7e656a2a4512bb3
