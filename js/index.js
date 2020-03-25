@@ -1,5 +1,12 @@
 $(document).ready(function() {
     // get videos & its metadata
+    const date = document.getElementById('date');
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var day = dateObj.getUTCDate();
+    var dayoftheWeek= dateObj.getDay();
+    date.innerHTML = `<h3>${days[dayoftheWeek]},</h3>` + `<h3>${months[month-1]} ${day}</h3>`;
+
     $.ajax({
         url: "https://ign-apis.herokuapp.com/videos?startIndex=0&count=20",
         headers: {
@@ -149,7 +156,9 @@ $(document).ready(function() {
         }
     });
 });
-// var numComments = [];
+
+var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var playlist = [];
 const title = document.getElementById('title');
 const videoTitle = document.getElementById('video-title');
