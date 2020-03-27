@@ -1,6 +1,5 @@
-package Quest;
-
 import java.util.*;
+
 class Scheduler {
 
   public Quest[] sortQuests(Quest[] quests) {
@@ -108,6 +107,21 @@ class Scheduler {
     ArrayList<Quest> optimalQuests;
     optimalQuests = schedule.findOptimalQuests(quests);
     schedule.printOptimalQuests(optimalQuests);
+  }
+
+}
+
+class Quest {
+  String quest;
+  int startDate;
+  int duration;
+  int reward;
+
+  public Quest(String quest, int startDate, int duration, int reward) {
+    this.quest = quest;
+    this.startDate = startDate;
+    this.duration = duration;
+    this.reward = reward;
   }
 
 }
