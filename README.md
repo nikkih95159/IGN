@@ -1,3 +1,6 @@
+## Video Player Project
+A video player web page that loads videos from the IGN API and contains stylized video controls. 
+
 ## Prerequisites
 
 You need Node.js and npm installed on your computer. This project was built against the following versions:
