@@ -1,19 +1,6 @@
 package Quest;
 
 import java.util.*;
-/**
-I implemented this solution using the greedy scheduling algorithm. The algorithm
-sorts the array based on finish time order, and then greedily chooses the earliest
-finish time as long as the next start time doesn't overlap with the previous finish time
-and subsequently chooses the next quest based on the next earliest finish time.
-My solution would be successful with other quest boards if the other are the quest boards
-are in the same format: quests, start data, duration, and reward. My solution could be 
-improved as I realized it would be nicer to read a board automatically instead of inputting it
-manually. It runs in O(n log n) time where n are Link's tasks. I believe my solution is efficient
-because sorting the quests based on finish time is more optimal than choosing quests based
-on reward or earliest start time as high rewards may have longer durations and an early start
-time does not guarentee a short quest. 
-*/
 class Scheduler {
 
   public Quest[] sortQuests(Quest[] quests) {

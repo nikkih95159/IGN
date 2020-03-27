@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    // get videos & its metadata
+    document.body.style.zoom = 1.0;
+    // get the current date
     const date = document.getElementById('date');
     var dateObj = new Date();
     var month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -7,12 +8,13 @@ $(document).ready(function() {
     var dayoftheWeek= dateObj.getDay();
     date.innerHTML = `<h3>${days[dayoftheWeek]},</h3>` + `<h3>${months[month-1]} ${day}</h3>`;
 
+    // API call to get videos and their metadata
     $.ajax({
         url: "https://ign-apis.herokuapp.com/videos?startIndex=0&count=20",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        type: "GET", /* or type:"GET" or type:"PUT" */
+        type: "GET",
         dataType: "json",
         data: {
         },
@@ -47,12 +49,13 @@ $(document).ready(function() {
             alert("Request: " + JSON.stringify(request));
         }
     })
+    // API call to get videos and their metadata
     $.ajax({
         url: "https://ign-apis.herokuapp.com/videos?startIndex=20&count=20",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        type: "GET", /* or type:"GET" or type:"PUT" */
+        type: "GET",
         dataType: "json",
         data: {
         },
@@ -67,29 +70,32 @@ $(document).ready(function() {
                 if (mm < 10)
                     mm = '0' + mm;
                 var d = mm+'/'+dd+'/'+yyyy;
+                var assetSize = data.data[i].assets.length;
+                var thumbnailSize = data.data[i].thumbnails.length;
                 playlist[i+20] = {
                     contentId: data.data[i].contentId,
                     title: data.data[i].metadata.title,
-                    thumbnail: data.data[i].thumbnails[2].url,
-                    url: data.data[i].assets[3].url,
+                    thumbnail: data.data[i].thumbnails[thumbnailSize-1].url,
+                    url: data.data[i].assets[1].url,
+                    HDurl: data.data[i].assets[assetSize - 1].url,
                     description: data.data[i].metadata.description,
                     date: d,
                     comments: 0
                 };
                 addComments(i+20);
             }
-            // loadVideos();
         },
         error: function(request, error) {
             alert("Request: " + JSON.stringify(request));
         }
     });
+    // API call to get videos and their metadata
     $.ajax({
         url: "https://ign-apis.herokuapp.com/videos?startIndex=40&count=20",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        type: "GET", /* or type:"GET" or type:"PUT" */
+        type: "GET",
         dataType: "json",
         data: {
         },
@@ -104,18 +110,20 @@ $(document).ready(function() {
                 if (mm < 10)
                     mm = '0' + mm;
                 var d = mm+'/'+dd+'/'+yyyy;
+                var assetSize = data.data[i].assets.length;
+                var thumbnailSize = data.data[i].thumbnails.length;
                 playlist[i+40] = {
                     contentId: data.data[i].contentId,
                     title: data.data[i].metadata.title,
-                    thumbnail: data.data[i].thumbnails[2].url,
-                    url: data.data[i].assets[3].url,
+                    thumbnail: data.data[i].thumbnails[thumbnailSize-1].url,
+                    url: data.data[i].assets[1].url,
+                    HDurl: data.data[i].assets[assetSize - 1].url,
                     description: data.data[i].metadata.description,
                     date: d,
                     comments: 0
                 };
                 addComments(i+40);
             }
-            // loadVideos();
         },
         error: function(request, error) {
             alert("Request: " + JSON.stringify(request));
@@ -127,23 +135,21 @@ $(document).ready(function() {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        type: "GET", /* or type:"GET" or type:"PUT" */
+        type: "GET",
         dataType: "json",
         data: {
         },
         success: function(data) {
             for (i = 0; i < data.data.length; i++) {
+                // parse the article title name with either the words before the colon or if no colon exists, just get the first two words
                 if (data.data[i].metadata.objectName !== "")
                     document.getElementById(`nav${i}`).innerHTML = data.data[i].metadata.objectName;
                 else {
-                    // console.log(data.data[i].metadata.headline);
                     var nav = data.data[i].metadata.headline.substring(0, data.data[i].metadata.headline.indexOf(":"));
                     if (nav === "") {
-                        // console.log(data.data[i].metadata.headline);
                         var ind1 = data.data[i].metadata.headline.indexOf(' ');
                         var ind2 = data.data[i].metadata.headline.indexOf(' ', ind1 + 1);
                         var substring = data.data[i].metadata.headline.substring(0,ind2);
-                        // console.log(substring);
                         document.getElementById(`nav${i}`).innerHTML = substring;
                     }
                     else
@@ -160,22 +166,27 @@ $(document).ready(function() {
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var playlist = [];
+
+// variables for the main video element
 const title = document.getElementById('title');
 const videoTitle = document.getElementById('video-title');
 const videoDescription = document.getElementById('video-description');
 const videoComments = document.getElementById('video-comments');
 const videoDate = document.getElementById('video-date');
 const video = document.getElementById('video0');
+
+// control variables
 const videoControls = document.getElementById('video-controls');
 const topControls = document.getElementById('top-controls');
 
+// API call to get the comments for videos based on their contentId
 function addComments(i) {
     $.ajax({
         url: `https://ign-apis.herokuapp.com/comments?ids=${playlist[i].contentId}`,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        type: "GET", /* or type:"GET" or type:"PUT" */
+        type: "GET",
         dataType: "json",
         data: {},
         success: function(data) {
@@ -187,8 +198,9 @@ function addComments(i) {
     })
 }
 
+// load the main video and its details
+// default video quality size is low quality
 function loadVideos() {
-    //load main video
     video.setAttribute('src', playlist[0].url);
     video.setAttribute('poster', playlist[0].thumbnail);
     title.innerHTML = playlist[0].title;
@@ -205,6 +217,7 @@ function loadVideos() {
     
 }
 
+// remove native controls and implement our own
 const videoWorks = !!document.createElement('video').canPlayType;
 if (videoWorks) {
     video.controls = false;
@@ -212,6 +225,7 @@ if (videoWorks) {
     topControls.classList.remove('hidden');
 }
 
+// toggle play and pause button controls
 const playButton = document.getElementById('play');
 playButton.addEventListener('click', togglePlay);
 function togglePlay() {
@@ -223,8 +237,7 @@ function togglePlay() {
     }
 }
 
-
-// const playbackIcons = document.querySelectorAll('.playback-icons use');
+// update play and pause button when video is paused or played
 const playbackIcons = document.querySelectorAll('.playback-icons object');
 video.addEventListener('play', updatePlayButton);
 video.addEventListener('pause', updatePlayButton);
@@ -239,6 +252,7 @@ function updatePlayButton() {
     }
 }
 
+// format time for video
 const timeElapsed = document.getElementById('time-elapsed');
 const duration = document.getElementById('duration');
 video.addEventListener('loadedmetadata', initializeVideo);
@@ -250,6 +264,8 @@ function formatTime(timeInSeconds) {
         seconds: result.substr(6,2),
     };
 }
+
+// set video duration
 const progressBar = document.getElementById('progress-bar');
 const seek = document.getElementById('seek');
 function initializeVideo() {
@@ -261,6 +277,7 @@ function initializeVideo() {
     duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`)
 }
 
+// update time elapsed shown on video controls
 video.addEventListener('timeupdate', updateTimeElapsed);
 video.addEventListener('timeupdate', updateProgress);
 function updateTimeElapsed() {
@@ -274,6 +291,7 @@ function updateProgress() {
     progressBar.value = Math.floor(video.currentTime);
 }
 
+// update tooltip when mouse hovers
 const seekTooltip = document.getElementById('seek-tooltip');
 seek.addEventListener('mousemove', updateSeekTooltip);
 function updateSeekTooltip(event) {
@@ -285,6 +303,7 @@ function updateSeekTooltip(event) {
     seekTooltip.style.left = `${event.pageX - rect.left}px`;
 }
 
+// skip to video where user clicked
 seek.addEventListener('input', skipAhead);
 function skipAhead(event) {
     const skipTo = event.target.dataset.seek;
@@ -293,8 +312,8 @@ function skipAhead(event) {
     seek.value = skipTo;
 }
 
+// update sound based on volume controls
 const volumeButton = document.getElementById('volume-button');
-// const volumeIcons = document.querySelectorAll('.volume-button use');
 const volumeIcons = document.querySelectorAll('.volume-button object');
 const volumeMute = document.getElementById('mute');
 const volumeLow = document.getElementById('volume-low');
@@ -309,6 +328,7 @@ function updateVolume() {
     video.volume = volume.value;
 }
 
+// update volume icons based on sound
 video.addEventListener('volumechange', updateVolumeIcon);
 function updateVolumeIcon() {
     volumeIcons.forEach(icon => {
@@ -329,6 +349,7 @@ function updateVolumeIcon() {
     }
 }
 
+// toggle volume and mute buttons
 volumeButton.addEventListener('click', toggleMute);
 function toggleMute() {
     video.muted = !video.muted;
@@ -342,6 +363,7 @@ function toggleMute() {
     }
 }
 
+// animate the fade pause and play icon
 video.addEventListener('click', togglePlay);
 const playbackAnimation = document.getElementById('playback-animation');
 video.addEventListener('click', animatePlayback);
@@ -359,9 +381,6 @@ function animatePlayback() {
     });
 }
 
-// const arrowIcons = document.querySelectorAll('.arrow-animation object');
-// const goBack = document.getElementById('goback');
-// const skip = document.getElementById('skip');
 document.body.onkeyup = function(e){
     // spacebar keyboard press, pause video
     if(e.keyCode == 32){
@@ -372,25 +391,17 @@ document.body.onkeyup = function(e){
 
     // left arrow keyboard press, go back 10 seconds
     if (e.keyCode == 37) {
-        // goBack.setAttribute('class', '');
-        // skip.setAttribute('class', 'hidden');
-        // animateArrow();
         video.currentTime -= 10;
     }
     
     // right arrow keyboard press, skip ahead by 10 seconds
     if (e.keyCode == 39) {
-        // skip.setAttribute('class', '');
-        // goBack.setAttribute('class', 'hidden');
-        // animateArrow();
         video.currentTime += 10;
     }
     
-    // goBack.setAttribute('class', 'hidden');
-    // skip.setAttribute('class', 'hidden');
-    //38 up, 40 down
 }
 
+// toggle fullscreen video
 const fullscreenButton = document.getElementById('fullscreen-button');
 const videoContainer = document.getElementById('video-container');
 fullscreenButton.onclick = toggleFullScreen;
@@ -403,6 +414,7 @@ function toggleFullScreen() {
     }
 }
 
+// update fullscreen icons and data titles
 const fullscreenIcons = fullscreenButton.querySelectorAll('object');
 videoContainer.addEventListener('fullscreenchange', updateFullscreenButton);
 function updateFullscreenButton() {
@@ -497,7 +509,7 @@ function keyboardShortcuts(event) {
     }
 }
 
-// play next video in playlist
+// if video ends without user clicking on a video, automatically play the next video in the playlist array
 var playlistIndex = 1;
 video.addEventListener('ended', playNextVideo);
 function playNextVideo() {
@@ -529,6 +541,7 @@ function playNextVideo() {
     }
 }
 
+// play next video in playlist when the next arrow is clicked (top right)
 const nextButton = document.getElementById('next-button');
 nextButton.addEventListener('click', playNext);
 function playNext() {
@@ -555,6 +568,7 @@ function playNext() {
     }
 }
 
+// variables and click listeners for the 1st four videos shown
 const video1 = document.getElementById('video1');
 video1.addEventListener('click', function() {
     playClickedVideo(1);
@@ -574,6 +588,8 @@ video4.addEventListener('click', function() {
 const playIcon = document.getElementById('play-button');
 const pauseIcon = document.getElementById('pause-button');
 var index = 0;
+
+// play the video the user clicks on
 function playClickedVideo(num) {
     if (video.getAttribute('src') !== playlist[num].url || video.getAttribute('src') !== playlist[1].HDurl) {
         if (HDButton.getAttribute('data-title') === 'HD')
@@ -596,12 +612,11 @@ function playClickedVideo(num) {
     }
 }
 
+// load more videos if the 'Load More' button is pressed
 const loadButton = document.getElementById('load-button');
-// loadButton.addEventListener('click', loadVideos);
 const moreVideos = document.getElementById('more-videos');
 var videosDisplayed = 4;
 function loadMoreVideos() {
-    // console.log(videosDisplayed);
     videosDisplayed++;
     for (i = videosDisplayed; i < videosDisplayed+4; i++) {
         console.log(i);
@@ -631,6 +646,7 @@ function loadMoreVideos() {
     videosDisplayed += 3;
 }
 
+// repeat current video if repeat button is clicked
 const repeatButton = document.getElementById('repeat-button');
 repeatButton.addEventListener('click', toggleLoop);
 const repeatIcons = document.querySelectorAll('.repeat-button object');
@@ -646,6 +662,7 @@ function toggleLoop() {
     }
 }
 
+// change current video quality to HD
 const HDButton = document.getElementById('HD-button');
 HDButton.addEventListener('click', toggleHD);
 const HDIcons = document.querySelectorAll('.HD-button object');
@@ -653,8 +670,6 @@ function toggleHD() {
     HDIcons.forEach(icon => icon.classList.toggle('hidden'));
     if (HDButton.getAttribute('data-title') === 'HD') {
         var currTime = video.currentTime;
-        // var str = video.getAttribute('id').substring(5, video.getAttribute('id').length);
-        // str = parseInt(str);
         HDButton.setAttribute('data-title', 'Regular');
         video.setAttribute('src', playlist[index].HDurl);
         video.currentTime = currTime;
@@ -662,12 +677,9 @@ function toggleHD() {
     }
     else {
         var currTime = video.currentTime;
-        // var str = video.getAttribute('id').substring(5, video.getAttribute('id').length);
-        // str = parseInt(str);
         HDButton.setAttribute('data-title', 'HD');
         video.setAttribute('src', playlist[index].url);
         video.currentTime = currTime;
         video.play();
     }
-    // repeatButton.setAttribute('data-title', 'No Repeat (r)');
 }
