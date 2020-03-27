@@ -20,6 +20,9 @@ If the videos do not load, you may need to turn off CORS through a Google Extens
 To get started, I used this tutorial: https://freshman.tech/custom-html5-video/ <br />
 Starter code: https://github.com/Freshman-tech/custom-htm5-video-starter-files
 
+## Introduction
+`IGN.pdf`
+
 ## Link's Quests
 The main code is in `Scheduler.java`
 
