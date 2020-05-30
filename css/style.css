@@ -121,7 +121,7 @@ body {
 /* } */
 
 .video-container {
-  width: 600px;
+  width: 800px;
   border-radius: 4px;
   /* margin: 0 auto; */
   top: 50px;
@@ -145,7 +145,7 @@ body {
 }
 
 .description-container {
-  width: 600px;
+  width: 800px;
   top: 575px;
   left: 100px;
   position: absolute;
