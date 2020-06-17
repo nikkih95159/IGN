@@ -1,6 +1,10 @@
 ## Video Player Project
 A video player web page that loads videos from the IGN API and contains stylized video controls. 
 
+## View
+https://nikkih95159.github.io/IGN/
+**Note you have to turn on CORS to view the website
+
 ## Prerequisites
 
 You need Node.js and npm installed on your computer. This project was built against the following versions:
